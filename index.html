@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Engagement Invitation — Ihjas & Sahra</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Great+Vibes&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Ring -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --bg-deep: #071510;
+            --bg-emerald: #0b1f18;
+            --emerald-card: #0e2920;
+            --gold-primary: #e5be65;
+            --gold-light: #fae4a8;
+            --gold-dark: #b88628;
+            --gold-gradient: linear-gradient(135deg, #fae4a8 0%, #d8a741 50%, #8f6718 100%);
+            --gold-foil: linear-gradient(45deg, #e4b95f, #fff3c4, #d49f32, #fceda6, #b07e1e);
+            --text-light: #f7f3e8;
+            --text-muted: #c8d4ce;
+            --seal-emerald: #09261d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Subtle Islamic Arabesque Geometric Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(216, 167, 65, 0.08) 1px, transparent 1px),
+                              radial-gradient(rgba(216, 167, 65, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Golden Star Dust */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(250, 228, 168, 0.8);
+            animation: twinkle 4s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.6); }
+            50% { opacity: 0.9; transform: scale(1.2); }
+        }
+
+        /* ========================================================
+           1. ENVELOPE OPENING STAGE
+           ======================================================== */
+        #envelope-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background: radial-gradient(circle at center, #0e2920 0%, #05120d 100%);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s ease;
+        }
+
+        #envelope-stage.opened {
+            opacity: 0;
+            transform: scale(1.15) translateY(-30px);
+            pointer-events: none;
+        }
+
+        .envelope-outer {
+            width: 90%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .envelope-caption {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.85rem;
+            color: var(--gold-light);
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(216, 167, 65, 0.5);
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        /* The Envelope Graphic */
+        .envelope-card {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: linear-gradient(145deg, #123328, #091c15);
+            border-radius: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
+                        0 0 30px rgba(216, 167, 65, 0.15),
+                        inset 0 0 0 1px rgba(216, 167, 65, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        /* Envelope Flap Lines (V-shape) */
+        .envelope-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 110px;
+            background: linear-gradient(180deg, rgba(216, 167, 65, 0.18), transparent);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border-bottom: 1px solid rgba(216, 167, 65, 0.35);
+        }
+
+        /* Arabesque Corners inside Envelope */
+        .env-corner {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--gold-primary);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .env-corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .env-corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .env-corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .env-corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        /* ========================================================
+           WAX STAMP WITH EXACT RING EMBOSSING
+           ======================================================== */
+        .wax-stamp-button {
+            position: relative;
+            z-index: 10;
+            width: 105px;
+            height: 105px;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.25s ease;
+        }
+
+        .wax-stamp-button:hover {
+            transform: scale(1.05);
+        }
+
+        .wax-stamp-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Realistic Wax Seal (Emerald & Gold Royalty) */
+        .wax-seal {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #1a4d3b 0%, #0c2b20 50%, #051610 100%);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                        inset 0 -3px 6px rgba(0, 0, 0, 0.6),
+                        0 0 0 3px rgba(216, 167, 65, 0.5),
+                        0 0 25px rgba(216, 167, 65, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Scalloped irregular wax edge */
+        .wax-seal::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 48% 52% 51% 49% / 51% 49% 52% 48%;
+            border: 2px dashed rgba(216, 167, 65, 0.3);
+            pointer-events: none;
+        }
+
+        /* Gold Medallion center */
+        .seal-gold-medallion {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #fff2c4 0%, #d49f32 45%, #886214 90%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.7),
+                        inset 0 -2px 5px rgba(0,0,0,0.5),
+                        0 3px 8px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px;
+        }
+
+        /* Exact Infinity Ring SVG on Stamp */
+        .seal-ring-svg {
+            width: 58px;
+            height: 38px;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6));
+        }
+
+        .seal-date-text {
+            font-family: 'Cinzel', serif;
+            font-size: 6.5px;
+            font-weight: 700;
+            color: #422d05;
+            letter-spacing: 1px;
+            margin-top: 1px;
+            text-transform: uppercase;
+        }
+
+        .tap-prompt {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            opacity: 0.85;
+            animation: tapBlink 2s infinite ease-in-out;
+        }
+
+        @keyframes tapBlink {
+            0%, 100% { opacity: 0.5; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-3px); }
+        }
+
+        /* ========================================================
+           2. MAIN INVITATION PAGE
+           ======================================================== */
+        #invitation-content {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease 0.3s;
+            position: relative;
+            z-index: 10;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        #invitation-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Islamic Arch Card Frame */
+        .invitation-frame {
+            background: linear-gradient(180deg, rgba(14, 41, 32, 0.95) 0%, rgba(8, 24, 19, 0.98) 100%);
+            border-radius: 28px;
+            border: 1.5px solid rgba(216, 167, 65, 0.45);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9),
+                        0 0 40px rgba(216, 167, 65, 0.12),
+                        inset 0 0 25px rgba(216, 167, 65, 0.05);
+            padding: 38px 22px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Arch Header Decoration */
+        .arch-crown {
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        /* Bismillah Calligraphy */
+        .bismillah-box {
+            margin-bottom: 22px;
+        }
+
+        .bismillah-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 2.1rem;
+            line-height: 1.3;
+            color: var(--gold-primary);
+            text-shadow: 0 0 20px rgba(229, 190, 101, 0.4);
+        }
+
+        .bismillah-meaning {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            color: var(--gold-light);
+            opacity: 0.75;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Decorative Gold Divider */
+        .gold-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 22px auto;
+            max-width: 220px;
+        }
+        .gold-divider::before, .gold-divider::after {
+            content: '';
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+        .divider-gem {
+            color: var(--gold-primary);
+            font-size: 0.85rem;
+            filter: drop-shadow(0 0 5px var(--gold-primary));
+        }
+
+        /* Ceremony Announcement */
+        .ceremony-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+        }
+
+        .invitation-prefix {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            font-weight: 300;
+            margin-bottom: 18px;
+        }
+
+        /* Couple Names */
+        .couple-container {
+            margin: 15px 0 22px;
+        }
+
+        .groom-name, .bride-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            line-height: 1.15;
+            background: var(--gold-foil);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
+        }
+
+        .name-ampersand {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--gold-light);
+            display: block;
+            margin: 2px 0;
+            opacity: 0.8;
+        }
+
+        /* ========================================================
+           3. 3D INTERACTIVE RING CONTAINER
+           ======================================================== */
+        .ring-showcase-box {
+            position: relative;
+            width: 100%;
+            height: 290px;
+            margin: 20px auto 10px;
+            border-radius: 20px;
+            background: radial-gradient(circle at center, rgba(14, 49, 36, 0.8) 0%, rgba(4, 15, 10, 0.95) 75%);
+            border: 1px solid rgba(216, 167, 65, 0.35);
+            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8),
+                        0 8px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #ring-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .ring-tagline {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        .rotate-hint {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.62rem;
+            color: var(--gold-light);
+            opacity: 0.55;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        /* ========================================================
+           4. EVENT DETAILS CARDS
+           ======================================================== */
+        .event-details-grid {
+            margin: 25px 0 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(216, 167, 65, 0.25);
+            border-radius: 14px;
+            padding: 16px 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .detail-card:hover {
+            border-color: rgba(216, 167, 65, 0.6);
+            transform: translateY(-2px);
+            background: rgba(216, 167, 65, 0.05);
+        }
+
+        .detail-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(216, 167, 65, 0.2) 0%, rgba(216, 167, 65, 0.05) 100%);
+            border: 1px solid var(--gold-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            color: var(--gold-primary);
+            font-size: 1.1rem;
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-heading {
+            font-family: 'Cinzel', serif;
+            font-size: 0.68rem;
+            color: var(--gold-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .detail-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Quran Verse Box */
+        .quran-verse {
+            margin: 28px 0 20px;
+            padding: 18px 14px;
+            border-left: 2px solid var(--gold-primary);
+            border-right: 2px solid var(--gold-primary);
+            background: rgba(216, 167, 65, 0.03);
+            border-radius: 8px;
+        }
+
+        .verse-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            color: var(--gold-light);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .verse-english {
+            font-size: 0.75rem;
+            font-style: italic;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .verse-ref {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            color: var(--gold-primary);
+            margin-top: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Countdown Timer */
+        .countdown-section {
+            margin: 24px 0;
+        }
+
+        .countdown-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 14px;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .time-box {
+            background: rgba(8, 24, 19, 0.8);
+            border: 1px solid rgba(216, 167, 65, 0.3);
+            border-radius: 12px;
+            padding: 10px 4px;
+        }
+
+        .time-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.58rem;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Save The Date Action */
+        .action-area {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .save-date-btn {
+            background: var(--gold-gradient);
+            color: #1a1200;
+            border: none;
+            outline: none;
+            padding: 15px 28px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(216, 167, 65, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .save-date-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(216, 167, 65, 0.6);
+        }
+
+        .save-date-btn:active {
+            transform: scale(0.97);
+        }
+
+        .alt-calendar-links {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 4px;
+        }
+
+        .cal-link-btn {
+            background: transparent;
+            border: none;
+            color: var(--gold-light);
+            font-size: 0.72rem;
+            text-decoration: underline;
+            cursor: pointer;
+            letter-spacing: 1px;
+            opacity: 0.75;
+            transition: opacity 0.2s;
+        }
+
+        .cal-link-btn:hover {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .invitation-footer {
+            margin-top: 35px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            color: var(--gold-primary);
+            opacity: 0.85;
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #113629;
+            color: var(--gold-light);
+            border: 1px solid var(--gold-primary);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+    <div class="stars-container" id="stars-box"></div>
+
+    <!-- ========================================================
+         ENVELOPE SCREEN WITH THE EXACT RING STAMP
+         ======================================================== -->
+    <div id="envelope-stage">
+        <div class="envelope-outer">
+            <div class="envelope-caption">You Are Cordially Invited</div>
+
+            <div class="envelope-card">
+                <div class="env-corner tl"></div>
+                <div class="env-corner tr"></div>
+                <div class="env-corner bl"></div>
+                <div class="env-corner br"></div>
+
+                <!-- Center Wax Stamp with the EXACT Ring Design -->
+                <button class="wax-stamp-button" id="open-envelope-btn" aria-label="Tap seal to open invitation">
+                    <div class="wax-seal">
+                        <div class="seal-gold-medallion">
+                            <!-- SVG reproduction of the exact infinity ring with solitaire in left loop -->
+                            <svg class="seal-ring-svg" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Ring Band Behind -->
+                                <ellipse cx="50" cy="38" rx="36" ry="12" stroke="#684a0c" stroke-width="3.5" fill="none"/>
+                                <ellipse cx="50" cy="38" rx="36" ry="12" stroke="#fceaa8" stroke-width="1.8" fill="none"/>
+                                
+                                <!-- Infinity Base Solid Gold -->
+                                <path d="M50 24 C40 10, 16 10, 16 24 C16 38, 40 38, 50 24 C60 10, 84 10, 84 24 C84 38, 60 38, 50 24 Z"
+                                      stroke="#5c3f07" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M50 24 C40 10, 16 10, 16 24 C16 38, 40 38, 50 24 C60 10, 84 10, 84 24 C84 38, 60 38, 50 24 Z"
+                                      stroke="#ffd700" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                
+                                <!-- Solitaire Bezel and Diamond Inside LEFT loop -->
+                                <circle cx="30" cy="24" r="7.5" fill="#5c3f07"/>
+                                <circle cx="30" cy="24" r="6.2" fill="#ffd700"/>
+                                <circle cx="30" cy="24" r="4.2" fill="#ffffff" stroke="#c0d8f0" stroke-width="0.8"/>
+                                <!-- Diamond Sparkle on Solitaire -->
+                                <polygon points="30,19.8 31.4,23 34.2,24 31.4,25 30,28.2 28.6,25 25.8,24 28.6,23" fill="#ffffff"/>
+
+                                <!-- Micro Pavé Diamond Dots around the infinity track -->
+                                <circle cx="50" cy="24" r="1.5" fill="#fff"/>
+                                <circle cx="44" cy="18" r="1.3" fill="#fff"/>
+                                <circle cx="38" cy="15" r="1.3" fill="#fff"/>
+                                <circle cx="30" cy="14" r="1.3" fill="#fff"/>
+                                <circle cx="22" cy="16" r="1.3" fill="#fff"/>
+                                <circle cx="17" cy="21" r="1.3" fill="#fff"/>
+                                <circle cx="17" cy="27" r="1.3" fill="#fff"/>
+                                <circle cx="22" cy="32" r="1.3" fill="#fff"/>
+                                <circle cx="30" cy="34" r="1.3" fill="#fff"/>
+                                <circle cx="38" cy="33" r="1.3" fill="#fff"/>
+                                <circle cx="44" cy="29" r="1.3" fill="#fff"/>
+                                
+                                <circle cx="56" cy="18" r="1.3" fill="#fff"/>
+                                <circle cx="62" cy="15" r="1.3" fill="#fff"/>
+                                <circle cx="70" cy="14" r="1.3" fill="#fff"/>
+                                <circle cx="78" cy="16" r="1.3" fill="#fff"/>
+                                <circle cx="83" cy="21" r="1.3" fill="#fff"/>
+                                <circle cx="83" cy="27" r="1.3" fill="#fff"/>
+                                <circle cx="78" cy="32" r="1.3" fill="#fff"/>
+                                <circle cx="70" cy="34" r="1.3" fill="#fff"/>
+                                <circle cx="62" cy="33" r="1.3" fill="#fff"/>
+                                <circle cx="56" cy="29" r="1.3" fill="#fff"/>
+                            </svg>
+                            <span class="seal-date-text">25 • 11 • 2026</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="tap-prompt">
+                <span>✦</span> Tap Seal to Open <span>✦</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         MAIN INVITATION CARD CONTENT
+         ======================================================== -->
+    <div id="invitation-content">
+        <div class="invitation-frame">
+
+            <!-- Islamic Arch SVG -->
+            <svg class="arch-crown" viewBox="0 0 260 50" fill="none">
+                <path d="M10 48 Q 10 12, 130 5 Q 250 12, 250 48" stroke="url(#goldGrad)" stroke-width="1.8"/>
+                <path d="M30 48 Q 30 18, 130 12 Q 230 18, 230 48" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.6"/>
+                <circle cx="130" cy="5" r="3.5" fill="var(--gold-primary)"/>
+                <circle cx="130" cy="5" r="7" stroke="var(--gold-primary)" stroke-width="0.8" opacity="0.5"/>
+                <defs>
+                    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#fae4a8" stop-opacity="0.1"/>
+                        <stop offset="50%" stop-color="#e5be65"/>
+                        <stop offset="100%" stop-color="#fae4a8" stop-opacity="0.1"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Bismillah Header -->
+            <div class="bismillah-box">
+                <div class="bismillah-arabic">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+                <div class="bismillah-meaning">In the name of Allah, the Most Gracious, the Most Merciful</div>
+            </div>
+
+            <div class="ceremony-title">Engagement Ceremony</div>
+            <div class="invitation-prefix">We invite you to celebrate the joyous union of</div>
+
+            <!-- Couple Names -->
+            <div class="couple-container">
+                <div class="groom-name">Ihjas</div>
+                <span class="name-ampersand">&</span>
+                <div class="bride-name">Sahra</div>
+            </div>
+
+            <div class="invitation-prefix">Together with their families</div>
+
+            <div class="gold-divider">
+                <span class="divider-gem">❖</span>
+            </div>
+
+            <!-- 3D EXACT INTERACTIVE RING MODEL -->
+            <div class="ring-showcase-box" id="ring-container">
+                <div class="rotate-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    <span>Drag to Rotate 3D</span>
+                </div>
+                <canvas id="ring-canvas"></canvas>
+                <div class="ring-tagline">Exact Aura Infinity Solitaire Ring</div>
+            </div>
+
+            <div class="gold-divider">
+                <span class="divider-gem">✦</span>
+            </div>
+
+            <!-- Ceremony Details -->
+            <div class="event-details-grid">
+                <!-- Date -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrap">📅</div>
+                    <div class="detail-info">
+                        <div class="detail-heading">Date & Day</div>
+                        <div class="detail-value">November 25, 2026</div>
+                        <div class="detail-sub">Wednesday Evening</div>
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrap">🕔</div>
+                    <div class="detail-info">
+                        <div class="detail-heading">Auspicious Time</div>
+                        <div class="detail-value">05:00 PM IST</div>
+                        <div class="detail-sub">Followed by Refreshments & Blessings</div>
+                    </div>
+                </div>
+
+                <!-- Venue -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrap">📍</div>
+                    <div class="detail-info">
+                        <div class="detail-heading">Venue</div>
+                        <div class="detail-value">Soorangal</div>
+                        <div class="detail-sub">Warmly welcoming your presence</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quranic Blessing -->
+            <div class="quran-verse">
+                <div class="verse-arabic">
+                    وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
+                </div>
+                <div class="verse-english">
+                    "And among His signs is that He created for you mates from among yourselves, that you may dwell in tranquility with them, and He has put love and mercy between your hearts."
+                </div>
+                <div class="verse-ref">— Surah Ar-Rum [30:21]</div>
+            </div>
+
+            <!-- Live Countdown -->
+            <div class="countdown-section">
+                <div class="countdown-title">Counting Down To The Blessed Day</div>
+                <div class="countdown-grid">
+                    <div class="time-box">
+                        <div class="time-value" id="cd-days">--</div>
+                        <div class="time-label">Days</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-hours">--</div>
+                        <div class="time-label">Hours</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-mins">--</div>
+                        <div class="time-label">Mins</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-secs">--</div>
+                        <div class="time-label">Secs</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Action -->
+            <div class="action-area">
+                <button class="save-date-btn" id="btn-save-gcal" onclick="addToGoogleCalendar()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Save The Date
+                </button>
+                <div class="alt-calendar-links">
+                    <button class="cal-link-btn" onclick="addToGoogleCalendar()">Google Calendar</button>
+                    <button class="cal-link-btn" onclick="downloadIcsFile()">Apple Calendar / Outlook (.ics)</button>
+                </div>
+            </div>
+
+            <div class="invitation-footer">
+                In shaa Allah
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast-msg">Added to Calendar!</div>
+
+    <!-- ========================================================
+         JAVASCRIPT & 3D WEBGL ENGINE
+         ======================================================== -->
+    <script>
+        // 1. Star Dust Animation
+        const starsBox = document.getElementById('stars-box');
+        for (let i = 0; i < 35; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const sz = Math.random() * 2.5 + 1;
+            s.style.width = sz + 'px';
+            s.style.height = sz + 'px';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.animationDelay = Math.random() * 4 + 's';
+            starsBox.appendChild(s);
+        }
+
+        // 2. Envelope Opening Logic
+        const envelopeStage = document.getElementById('envelope-stage');
+        const invitationContent = document.getElementById('invitation-content');
+        const openBtn = document.getElementById('open-envelope-btn');
+
+        function triggerOpenEnvelope() {
+            if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+            envelopeStage.classList.add('opened');
+            setTimeout(() => {
+                invitationContent.classList.add('visible');
+                envelopeStage.style.display = 'none';
+                init3DRing();
+            }, 800);
+        }
+
+        openBtn.addEventListener('click', triggerOpenEnvelope);
+
+        // 3. Countdown to November 25, 2026, 5:00 PM IST
+        const targetDate = new Date('2026-11-25T17:00:00+05:30').getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('cd-days').textContent = '00';
+                document.getElementById('cd-hours').textContent = '00';
+                document.getElementById('cd-mins').textContent = '00';
+                document.getElementById('cd-secs').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 4. Calendar Integrations
+        function addToGoogleCalendar() {
+            const title = encodeURIComponent("Ihjas & Sahra — Engagement Ceremony 💍");
+            const details = encodeURIComponent("Engagement Ceremony of Ihjas & Sahra\nDate: November 25, 2026 at 5:00 PM\nVenue: Soorangal\n\nIn shaa Allah.");
+            const location = encodeURIComponent("Soorangal");
+            const start = "20261125T113000Z"; // 5:00 PM IST = 11:30 AM UTC
+            const end = "20261125T143000Z";
+            const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+            window.open(url, '_blank');
+            showToast("Opening Google Calendar...");
+        }
+
+        function downloadIcsFile() {
+            const icsData = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Ihjas & Sahra//Engagement Invitation//EN',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'BEGIN:VEVENT',
+                'DTSTART:20261125T113000Z',
+                'DTEND:20261125T143000Z',
+                'SUMMARY:Ihjas & Sahra — Engagement Ceremony 💍',
+                'DESCRIPTION:Engagement Ceremony of Ihjas & Sahra at Soorangal. In shaa Allah.',
+                'LOCATION:Soorangal',
+                'STATUS:CONFIRMED',
+                'BEGIN:VALARM',
+                'TRIGGER:-P1D',
+                'ACTION:DISPLAY',
+                'DESCRIPTION:Reminder: Ihjas & Sahra Engagement tomorrow!',
+                'END:VALARM',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'Ihjas-Sahra-Engagement.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Calendar event downloaded!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-msg');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        // ========================================================
+        // 5. THREE.JS EXACT 3D RING MODEL IMPLEMENTATION
+        // ========================================================
+        let is3DInitialized = false;
+
+        function init3DRing() {
+            if (is3DInitialized) return;
+            is3DInitialized = true;
+
+            const container = document.getElementById('ring-container');
+            const canvas = document.getElementById('ring-canvas');
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene, Camera, Renderer
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+            camera.position.set(0, 0.4, 4.2);
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.35;
+
+            // Group holding the entire ring
+            const ringGroup = new THREE.Group();
+            scene.add(ringGroup);
+
+            // Lighting (High Luxury Jewelry Studio)
+            const ambLight = new THREE.AmbientLight(0xfff6e5, 1.2);
+            scene.add(ambLight);
+
+            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
+            mainLight.position.set(4, 6, 5);
+            scene.add(mainLight);
+
+            const fillLight = new THREE.DirectionalLight(0xddeeff, 1.8);
+            fillLight.position.set(-4, -2, 4);
+            scene.add(fillLight);
+
+            const backLight = new THREE.DirectionalLight(0xffe2a0, 2.2);
+            backLight.position.set(0, 4, -5);
+            scene.add(backLight);
+
+            // 18k Yellow Gold Material
+            const goldMaterial = new THREE.MeshStandardMaterial({
+                color: 0xdeb347,
+                metalness: 0.94,
+                roughness: 0.15
+            });
+
+            // Diamond Facet Material
+            const diamondMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                metalness: 0.05,
+                roughness: 0.02,
+                transmission: 0.7,
+                ior: 2.417,
+                reflectivity: 0.95,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.05
+            });
+
+            // ----------------------------------------------------
+            // A. Circular Finger Shank (Yellow Gold Wire Band)
+            // ----------------------------------------------------
+            // The band is a slender circular hoop with major radius ~ 1.2, tube radius ~ 0.048
+            // Sweeps from left attachment (theta ~ 0.35 rad) to right attachment (theta ~ 2.79 rad)
+            const shankRadius = 1.25;
+            const shankTube = 0.048;
+            
+            // Construct curve for the shank attaching to the left & right of infinity motif
+            class ShankCurve extends THREE.Curve {
+                getPoint(t) {
+                    // sweeps from angle 0.38 to 2*PI - 0.38
+                    const startAngle = 0.38;
+                    const endAngle = Math.PI * 2 - 0.38;
+                    const angle = startAngle + t * (endAngle - startAngle);
+                    
+                    const x = shankRadius * Math.cos(angle);
+                    const z = -shankRadius * Math.sin(angle);
+                    const y = 0;
+                    return new THREE.Vector3(x, y, z);
+                }
+            }
+            const shankGeo = new THREE.TubeGeometry(new ShankCurve(), 64, shankTube, 16, false);
+            const shankMesh = new THREE.Mesh(shankGeo, goldMaterial);
+            ringGroup.add(shankMesh);
+
+            // ----------------------------------------------------
+            // B. The Front Infinity Motif (∞)
+            // ----------------------------------------------------
+            // Lemniscate of Bernoulli Parametric Curve
+            const infScaleX = 0.85;
+            const infScaleY = 0.42;
+
+            class InfinityCurve extends THREE.Curve {
+                getPoint(t) {
+                    const u = t * Math.PI * 2;
+                    const denom = 1 + Math.sin(u) * Math.sin(u);
+                    const x = (infScaleX * Math.cos(u)) / denom;
+                    const y = (infScaleY * Math.sin(u) * Math.cos(u)) / denom;
+                    // Slightly curved in Z to naturally wrap around the finger
+                    const z = shankRadius - (x * x) * 0.12;
+                    return new THREE.Vector3(x, y, z);
+                }
+            }
+
+            const infinityCurve = new InfinityCurve();
+
+            // Gold Backing Tube for the Infinity Symbol
+            const infTubeGeo = new THREE.TubeGeometry(infinityCurve, 80, 0.052, 12, true);
+            const infTubeMesh = new THREE.Mesh(infTubeGeo, goldMaterial);
+            ringGroup.add(infTubeMesh);
+
+            // ----------------------------------------------------
+            // C. Micro Pavé Round Diamonds along Infinity Track
+            // ----------------------------------------------------
+            // Little round brilliant diamond spheres with gold prongs
+            const paveDiamondGeo = new THREE.SphereGeometry(0.038, 10, 8);
+            const paveCount = 28;
+
+            for (let i = 0; i < paveCount; i++) {
+                const t = i / paveCount;
+                const pt = infinityCurve.getPoint(t);
+                
+                // Normal direction pointing outward
+                const tangent = infinityCurve.getTangent(t);
+                const normal = new THREE.Vector3(0, 0, 1);
+                
+                const diamondMesh = new THREE.Mesh(paveDiamondGeo, diamondMaterial);
+                diamondMesh.position.copy(pt);
+                diamondMesh.position.z += 0.025; // slightly forward on the track face
+                ringGroup.add(diamondMesh);
+            }
+
+            // ----------------------------------------------------
+            // D. Solitaire Diamond Inside LEFT Loop
+            // ----------------------------------------------------
+            // Center of the left loop is located at approx x = -0.42, y = 0
+            const leftLoopCenter = new THREE.Vector3(-0.43, 0, shankRadius - 0.03);
+
+            // 1. Gold Bezel Cup
+            const bezelGeo = new THREE.CylinderGeometry(0.16, 0.16, 0.08, 24);
+            bezelGeo.rotateX(Math.PI / 2);
+            const bezelMesh = new THREE.Mesh(bezelGeo, goldMaterial);
+            bezelMesh.position.copy(leftLoopCenter);
+            ringGroup.add(bezelMesh);
+
+            // 2. Solitaire Diamond (Round Brilliant Cut approximation)
+            const solitaireGeo = new THREE.ConeGeometry(0.13, 0.14, 16);
+            solitaireGeo.rotateX(-Math.PI / 2); // points backward into the cup
+            const solitaireMesh = new THREE.Mesh(solitaireGeo, diamondMaterial);
+            solitaireMesh.position.copy(leftLoopCenter);
+            solitaireMesh.position.z += 0.02;
+            ringGroup.add(solitaireMesh);
+
+            // Sparkle Glint Sprite on the Solitaire
+            const sparkleCanvas = document.createElement('canvas');
+            sparkleCanvas.width = 64;
+            sparkleCanvas.height = 64;
+            const sCtx = sparkleCanvas.getContext('2d');
+            const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 30);
+            sGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            sGrad.addColorStop(0.3, 'rgba(255, 240, 180, 0.7)');
+            sGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            sCtx.fillStyle = sGrad;
+            sCtx.fillRect(0, 0, 64, 64);
+
+            const sparkleTex = new THREE.CanvasTexture(sparkleCanvas);
+            const sparkleMat = new THREE.SpriteMaterial({
+                map: sparkleTex,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8
+            });
+            const sparkleSprite = new THREE.Sprite(sparkleMat);
+            sparkleSprite.scale.set(0.35, 0.35, 1);
+            sparkleSprite.position.copy(leftLoopCenter);
+            sparkleSprite.position.z += 0.09;
+            ringGroup.add(sparkleSprite);
+
+            // Initial Pose: Facing slightly forward with an elegant tilt
+            ringGroup.rotation.x = 0.28;
+            ringGroup.rotation.y = 0.15;
+
+            // Touch / Mouse Rotation Controls
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            let userRotationY = 0;
+            let userRotationX = 0;
+
+            const onDown = (e) => {
+                isDragging = true;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                previousMousePosition = { x: clientX, y: clientY };
+            };
+
+            const onMove = (e) => {
+                if (!isDragging) return;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                const deltaX = clientX - previousMousePosition.x;
+                const deltaY = clientY - previousMousePosition.y;
+
+                userRotationY += deltaX * 0.012;
+                userRotationX += deltaY * 0.012;
+                userRotationX = Math.max(-0.6, Math.min(0.8, userRotationX));
+
+                previousMousePosition = { x: clientX, y: clientY };
+            };
+
+            const onUp = () => { isDragging = false; };
+
+            container.addEventListener('mousedown', onDown);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+
+            container.addEventListener('touchstart', onDown, { passive: true });
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('touchend', onUp);
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            });
+
+            // Animation Loop
+            let clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+
+                // Gentle continuous auto-turn if user isn't aggressively dragging
+                if (!isDragging) {
+                    userRotationY += 0.008;
+                }
+
+                ringGroup.rotation.y = userRotationY;
+                ringGroup.rotation.x = 0.22 + Math.sin(elapsed * 1.2) * 0.08 + userRotationX;
+
+                // Sparkle flashing
+                const spkVal = 0.6 + 0.4 * Math.sin(elapsed * 4.5);
+                sparkleSprite.scale.set(0.35 * spkVal, 0.35 * spkVal, 1);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
