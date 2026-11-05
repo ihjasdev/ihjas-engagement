@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Great+Vibes&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Three.js for 3D Ring -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --bg-deep: #071510;
@@ -285,7 +283,7 @@
         #invitation-content {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1.5s ease 0.3s;
+            transition: opacity 1.2s ease;
             position: relative;
             z-index: 10;
             max-width: 480px;
@@ -406,55 +404,78 @@
         }
 
         /* ========================================================
-           3. 3D INTERACTIVE RING CONTAINER
+           3. LUXURY RING PRESENTATION CARD (REAL PHOTO & EMBLEM)
            ======================================================== */
-        .ring-showcase-box {
+        .ring-luxury-card {
+            margin: 22px auto;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(216, 167, 65, 0.08) 0%, rgba(14, 41, 32, 0.5) 50%, rgba(216, 167, 65, 0.05) 100%);
+            border: 1px solid rgba(216, 167, 65, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(216, 167, 65, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ring-img-container {
             position: relative;
             width: 100%;
-            height: 290px;
-            margin: 20px auto 10px;
-            border-radius: 20px;
-            background: radial-gradient(circle at center, rgba(14, 49, 36, 0.8) 0%, rgba(4, 15, 10, 0.95) 75%);
-            border: 1px solid rgba(216, 167, 65, 0.35);
-            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8),
-                        0 8px 30px rgba(0, 0, 0, 0.5);
+            height: 220px;
             overflow: hidden;
-            touch-action: none;
         }
 
-        #ring-canvas {
+        .ring-photo {
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            object-position: center;
             display: block;
+            transition: transform 0.6s ease;
         }
 
-        .ring-tagline {
+        .ring-luxury-card:hover .ring-photo {
+            transform: scale(1.04);
+        }
+
+        .ring-img-overlay {
             position: absolute;
-            bottom: 10px;
+            top: 0;
             left: 0;
             right: 0;
-            text-align: center;
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            opacity: 0.65;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 55%, rgba(6, 20, 15, 0.95) 100%);
             pointer-events: none;
         }
 
-        .rotate-hint {
-            position: absolute;
-            top: 10px;
-            right: 14px;
+        .ring-meta-bar {
+            padding: 12px 16px 14px;
+            background: rgba(6, 20, 15, 0.95);
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.62rem;
+            justify-content: space-between;
+            border-top: 1px solid rgba(216, 167, 65, 0.25);
+        }
+
+        .ring-title-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
             color: var(--gold-light);
-            opacity: 0.55;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .ring-infinity-icon {
+            color: var(--gold-primary);
+            font-size: 1.1rem;
+        }
+
+        .ring-tag-caption {
+            font-size: 0.65rem;
+            color: var(--text-muted);
             letter-spacing: 1px;
-            pointer-events: none;
+            text-transform: uppercase;
         }
 
         /* ========================================================
@@ -817,14 +838,19 @@
                 <span class="divider-gem">❖</span>
             </div>
 
-            <!-- 3D EXACT INTERACTIVE RING MODEL -->
-            <div class="ring-showcase-box" id="ring-container">
-                <div class="rotate-hint">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                    <span>Drag to Rotate 3D</span>
+            <!-- LUXURY REAL RING PRESENTATION CARD (Pure Clean Aesthetic, No 3D WebGL) -->
+            <div class="ring-luxury-card">
+                <div class="ring-img-container">
+                    <img src="images/ring_aura.jpg" alt="Aura Infinity Solitaire Engagement Ring" class="ring-photo" loading="lazy">
+                    <div class="ring-img-overlay"></div>
                 </div>
-                <canvas id="ring-canvas"></canvas>
-                <div class="ring-tagline">Exact Aura Infinity Solitaire Ring</div>
+                <div class="ring-meta-bar">
+                    <div class="ring-title-badge">
+                        <span class="ring-infinity-icon">∞</span>
+                        <span>The Engagement Ring</span>
+                    </div>
+                    <div class="ring-tag-caption">Aura Infinity Solitaire</div>
+                </div>
             </div>
 
             <div class="gold-divider">
@@ -921,7 +947,7 @@
     <div class="toast" id="toast-msg">Added to Calendar!</div>
 
     <!-- ========================================================
-         JAVASCRIPT & 3D WEBGL ENGINE
+         JAVASCRIPT
          ======================================================== -->
     <script>
         // 1. Star Dust Animation
@@ -949,7 +975,6 @@
             setTimeout(() => {
                 invitationContent.classList.add('visible');
                 envelopeStage.style.display = 'none';
-                init3DRing();
             }, 800);
         }
 
@@ -1032,263 +1057,6 @@
             toast.textContent = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3200);
-        }
-
-        // ========================================================
-        // 5. THREE.JS EXACT 3D RING MODEL IMPLEMENTATION
-        // ========================================================
-        let is3DInitialized = false;
-
-        function init3DRing() {
-            if (is3DInitialized) return;
-            is3DInitialized = true;
-
-            const container = document.getElementById('ring-container');
-            const canvas = document.getElementById('ring-canvas');
-
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            // Scene, Camera, Renderer
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
-            camera.position.set(0, 0.4, 4.2);
-
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.35;
-
-            // Group holding the entire ring
-            const ringGroup = new THREE.Group();
-            scene.add(ringGroup);
-
-            // Lighting (High Luxury Jewelry Studio)
-            const ambLight = new THREE.AmbientLight(0xfff6e5, 1.2);
-            scene.add(ambLight);
-
-            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
-            mainLight.position.set(4, 6, 5);
-            scene.add(mainLight);
-
-            const fillLight = new THREE.DirectionalLight(0xddeeff, 1.8);
-            fillLight.position.set(-4, -2, 4);
-            scene.add(fillLight);
-
-            const backLight = new THREE.DirectionalLight(0xffe2a0, 2.2);
-            backLight.position.set(0, 4, -5);
-            scene.add(backLight);
-
-            // 18k Yellow Gold Material
-            const goldMaterial = new THREE.MeshStandardMaterial({
-                color: 0xdeb347,
-                metalness: 0.94,
-                roughness: 0.15
-            });
-
-            // Diamond Facet Material
-            const diamondMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0xffffff,
-                metalness: 0.05,
-                roughness: 0.02,
-                transmission: 0.7,
-                ior: 2.417,
-                reflectivity: 0.95,
-                clearcoat: 1.0,
-                clearcoatRoughness: 0.05
-            });
-
-            // ----------------------------------------------------
-            // A. Circular Finger Shank (Yellow Gold Wire Band)
-            // ----------------------------------------------------
-            // The band is a slender circular hoop with major radius ~ 1.2, tube radius ~ 0.048
-            // Sweeps from left attachment (theta ~ 0.35 rad) to right attachment (theta ~ 2.79 rad)
-            const shankRadius = 1.25;
-            const shankTube = 0.048;
-            
-            // Construct curve for the shank attaching to the left & right of infinity motif
-            class ShankCurve extends THREE.Curve {
-                getPoint(t) {
-                    // sweeps from angle 0.38 to 2*PI - 0.38
-                    const startAngle = 0.38;
-                    const endAngle = Math.PI * 2 - 0.38;
-                    const angle = startAngle + t * (endAngle - startAngle);
-                    
-                    const x = shankRadius * Math.cos(angle);
-                    const z = -shankRadius * Math.sin(angle);
-                    const y = 0;
-                    return new THREE.Vector3(x, y, z);
-                }
-            }
-            const shankGeo = new THREE.TubeGeometry(new ShankCurve(), 64, shankTube, 16, false);
-            const shankMesh = new THREE.Mesh(shankGeo, goldMaterial);
-            ringGroup.add(shankMesh);
-
-            // ----------------------------------------------------
-            // B. The Front Infinity Motif (∞)
-            // ----------------------------------------------------
-            // Lemniscate of Bernoulli Parametric Curve
-            const infScaleX = 0.85;
-            const infScaleY = 0.42;
-
-            class InfinityCurve extends THREE.Curve {
-                getPoint(t) {
-                    const u = t * Math.PI * 2;
-                    const denom = 1 + Math.sin(u) * Math.sin(u);
-                    const x = (infScaleX * Math.cos(u)) / denom;
-                    const y = (infScaleY * Math.sin(u) * Math.cos(u)) / denom;
-                    // Slightly curved in Z to naturally wrap around the finger
-                    const z = shankRadius - (x * x) * 0.12;
-                    return new THREE.Vector3(x, y, z);
-                }
-            }
-
-            const infinityCurve = new InfinityCurve();
-
-            // Gold Backing Tube for the Infinity Symbol
-            const infTubeGeo = new THREE.TubeGeometry(infinityCurve, 80, 0.052, 12, true);
-            const infTubeMesh = new THREE.Mesh(infTubeGeo, goldMaterial);
-            ringGroup.add(infTubeMesh);
-
-            // ----------------------------------------------------
-            // C. Micro Pavé Round Diamonds along Infinity Track
-            // ----------------------------------------------------
-            // Little round brilliant diamond spheres with gold prongs
-            const paveDiamondGeo = new THREE.SphereGeometry(0.038, 10, 8);
-            const paveCount = 28;
-
-            for (let i = 0; i < paveCount; i++) {
-                const t = i / paveCount;
-                const pt = infinityCurve.getPoint(t);
-                
-                // Normal direction pointing outward
-                const tangent = infinityCurve.getTangent(t);
-                const normal = new THREE.Vector3(0, 0, 1);
-                
-                const diamondMesh = new THREE.Mesh(paveDiamondGeo, diamondMaterial);
-                diamondMesh.position.copy(pt);
-                diamondMesh.position.z += 0.025; // slightly forward on the track face
-                ringGroup.add(diamondMesh);
-            }
-
-            // ----------------------------------------------------
-            // D. Solitaire Diamond Inside LEFT Loop
-            // ----------------------------------------------------
-            // Center of the left loop is located at approx x = -0.42, y = 0
-            const leftLoopCenter = new THREE.Vector3(-0.43, 0, shankRadius - 0.03);
-
-            // 1. Gold Bezel Cup
-            const bezelGeo = new THREE.CylinderGeometry(0.16, 0.16, 0.08, 24);
-            bezelGeo.rotateX(Math.PI / 2);
-            const bezelMesh = new THREE.Mesh(bezelGeo, goldMaterial);
-            bezelMesh.position.copy(leftLoopCenter);
-            ringGroup.add(bezelMesh);
-
-            // 2. Solitaire Diamond (Round Brilliant Cut approximation)
-            const solitaireGeo = new THREE.ConeGeometry(0.13, 0.14, 16);
-            solitaireGeo.rotateX(-Math.PI / 2); // points backward into the cup
-            const solitaireMesh = new THREE.Mesh(solitaireGeo, diamondMaterial);
-            solitaireMesh.position.copy(leftLoopCenter);
-            solitaireMesh.position.z += 0.02;
-            ringGroup.add(solitaireMesh);
-
-            // Sparkle Glint Sprite on the Solitaire
-            const sparkleCanvas = document.createElement('canvas');
-            sparkleCanvas.width = 64;
-            sparkleCanvas.height = 64;
-            const sCtx = sparkleCanvas.getContext('2d');
-            const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 30);
-            sGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            sGrad.addColorStop(0.3, 'rgba(255, 240, 180, 0.7)');
-            sGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            sCtx.fillStyle = sGrad;
-            sCtx.fillRect(0, 0, 64, 64);
-
-            const sparkleTex = new THREE.CanvasTexture(sparkleCanvas);
-            const sparkleMat = new THREE.SpriteMaterial({
-                map: sparkleTex,
-                blending: THREE.AdditiveBlending,
-                transparent: true,
-                opacity: 0.8
-            });
-            const sparkleSprite = new THREE.Sprite(sparkleMat);
-            sparkleSprite.scale.set(0.35, 0.35, 1);
-            sparkleSprite.position.copy(leftLoopCenter);
-            sparkleSprite.position.z += 0.09;
-            ringGroup.add(sparkleSprite);
-
-            // Initial Pose: Facing slightly forward with an elegant tilt
-            ringGroup.rotation.x = 0.28;
-            ringGroup.rotation.y = 0.15;
-
-            // Touch / Mouse Rotation Controls
-            let isDragging = false;
-            let previousMousePosition = { x: 0, y: 0 };
-            let userRotationY = 0;
-            let userRotationX = 0;
-
-            const onDown = (e) => {
-                isDragging = true;
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                previousMousePosition = { x: clientX, y: clientY };
-            };
-
-            const onMove = (e) => {
-                if (!isDragging) return;
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                const deltaX = clientX - previousMousePosition.x;
-                const deltaY = clientY - previousMousePosition.y;
-
-                userRotationY += deltaX * 0.012;
-                userRotationX += deltaY * 0.012;
-                userRotationX = Math.max(-0.6, Math.min(0.8, userRotationX));
-
-                previousMousePosition = { x: clientX, y: clientY };
-            };
-
-            const onUp = () => { isDragging = false; };
-
-            container.addEventListener('mousedown', onDown);
-            window.addEventListener('mousemove', onMove);
-            window.addEventListener('mouseup', onUp);
-
-            container.addEventListener('touchstart', onDown, { passive: true });
-            window.addEventListener('touchmove', onMove, { passive: true });
-            window.addEventListener('touchend', onUp);
-
-            // Resize Handler
-            window.addEventListener('resize', () => {
-                const w = container.clientWidth;
-                const h = container.clientHeight;
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
-                renderer.setSize(w, h);
-            });
-
-            // Animation Loop
-            let clock = new THREE.Clock();
-            function animate() {
-                requestAnimationFrame(animate);
-                const elapsed = clock.getElapsedTime();
-
-                // Gentle continuous auto-turn if user isn't aggressively dragging
-                if (!isDragging) {
-                    userRotationY += 0.008;
-                }
-
-                ringGroup.rotation.y = userRotationY;
-                ringGroup.rotation.x = 0.22 + Math.sin(elapsed * 1.2) * 0.08 + userRotationX;
-
-                // Sparkle flashing
-                const spkVal = 0.6 + 0.4 * Math.sin(elapsed * 4.5);
-                sparkleSprite.scale.set(0.35 * spkVal, 0.35 * spkVal, 1);
-
-                renderer.render(scene, camera);
-            }
-            animate();
         }
     </script>
 </body>
